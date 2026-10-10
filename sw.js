@@ -1,13 +1,33 @@
-const CACHE_NAME = 'deadly-animals-cache-v6'; // Bumped version
+const CACHE_NAME = 'deadly-animals-cache-v7'; // Bump this when you change the app so tablets pick up the new version
+
+// The animal list, so every picture can be saved for offline use when the app is installed.
+importScripts('animals.js');
+
+// All addresses are relative, so the app works in a subfolder (e.g. GitHub Pages) as well as at a site's root.
+const CORE_FILES = [
+    './',
+    './index.html',
+    './animals.js',
+    './world-map.js',
+    './manifest.json',
+    './icon-192.png',
+    './icon-512.png'
+];
+const ANIMAL_PICTURES = ANIMAL_ROWS.map(([name]) => `./animal-images/${name.toLowerCase().replace(/[^a-z0-9]+/g, '_')}.webp`);
+const EXTERNAL_FILES = [
+    'https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js',
+    'https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Luckiest+Guy&display=swap'
+];
 
 self.addEventListener('install', (event) => {
     self.skipWaiting(); // Force new version to take over immediately
     event.waitUntil(
-        caches.open(CACHE_NAME).then((cache) => {
-            return cache.addAll([
-                '/',
-                '/index.html',
-                '/manifest.json'
+        caches.open(CACHE_NAME).then(async (cache) => {
+            await cache.addAll(CORE_FILES); // the app can't work without these, so install fails if they fail
+            // Pictures and extras are saved one by one, so a single missing file doesn't stop the install
+            await Promise.allSettled([
+                ...ANIMAL_PICTURES.map((url) => cache.add(url)),
+                ...EXTERNAL_FILES.map((url) => fetch(new Request(url, { mode: 'no-cors' })).then((res) => cache.put(url, res)))
             ]);
         })
     );
@@ -16,21 +36,15 @@ self.addEventListener('install', (event) => {
 // Delete old caches so the tablet actually updates
 self.addEventListener('activate', (event) => {
     event.waitUntil(
-        caches.keys().then((cacheNames) => {
-            return Promise.all(
-                cacheNames.map((cache) => {
-                    if (cache !== CACHE_NAME) {
-                        return caches.delete(cache);
-                    }
-                })
-            );
-        })
+        caches.keys().then((cacheNames) => Promise.all(
+            cacheNames.filter((cache) => cache !== CACHE_NAME).map((cache) => caches.delete(cache))
+        )).then(() => self.clients.claim())
     );
 });
 
 self.addEventListener('fetch', (event) => {
-    // FIX: Ignore chrome-extension:// requests to stop the crashing error
-    if (!event.request.url.startsWith('http')) {
+    // Ignore chrome-extension:// and other non-web requests
+    if (!event.request.url.startsWith('http') || event.request.method !== 'GET') {
         return;
     }
 
@@ -40,10 +54,20 @@ self.addEventListener('fetch', (event) => {
                 return cachedResponse;
             }
             return fetch(event.request).then((networkResponse) => {
-                return caches.open(CACHE_NAME).then((cache) => {
-                    cache.put(event.request, networkResponse.clone());
+                // Only cache real files, so pictures added later still show up.
+                // (Font files from Google come back "opaque", which is fine to cache.)
+                if (!networkResponse.ok && networkResponse.type !== 'opaque') {
                     return networkResponse;
-                });
+                }
+                const copy = networkResponse.clone();
+                caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+                return networkResponse;
+            }).catch(() => {
+                // Offline and not saved: opening the app itself still works
+                if (event.request.mode === 'navigate') {
+                    return caches.match('./index.html');
+                }
+                return Response.error();
             });
         })
     );

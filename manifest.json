@@ -1,12 +1,14 @@
 {
-  "name": "Deadly Animals Kids App",
+  "name": "Deadly Animals",
   "short_name": "Deadly Animals",
-  "description": "A fun, educational app about deadly animals for kids.",
-  "start_url": "/index.html",
+  "description": "A fun, educational app about deadly animals from all over the world, for kids.",
+  "id": "./",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "fullscreen",
   "orientation": "landscape",
-  "background_color": "#E8F5E9",
-  "theme_color": "#FF9800",
+  "background_color": "#F6E7B8",
+  "theme_color": "#1E4D3B",
   "icons": [
     {
       "src": "icon-192.png",
