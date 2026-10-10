@@ -1,0 +1,12 @@
+# Mac and editor files
+.DS_Store
+.claude/
+
+# Original full-size photos (the app uses the smaller WebP copies in animal-images/)
+Images/
+
+# Old icon (a family photo, kept out of the public repo)
+old-icon.png
+
+# Notes for the next coding session
+HANDOVER.md
