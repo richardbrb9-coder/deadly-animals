@@ -1,4 +1,4 @@
-const CACHE_NAME = 'deadly-animals-cache-v10'; // Bump this when you change the app so tablets pick up the new version
+const CACHE_NAME = 'deadly-animals-cache-v11'; // Bump this when you change the app so tablets pick up the new version
 const CACHE_PREFIX = CACHE_NAME.replace(/\d+$/, ''); // Only delete this app's own old caches: every app on richardbrb9-coder.github.io shares the same cache storage
 
 // The animal list, so every picture can be saved for offline use when the app is installed.
