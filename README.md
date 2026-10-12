@@ -4,10 +4,14 @@ A fun, educational animal app for kids: an Animal-pedia of 127 deadly (and a few
 a World Map to explore who lives where, and games (Animal Pairs, Tiger Cub Rescue maze, Animal Quiz,
 Who Am I? and Safari Dash).
 
+## ▶️ [Open the app in your browser](https://richardbrb9-coder.github.io/deadly-animals/)
+
+**https://richardbrb9-coder.github.io/deadly-animals/** works on a computer, tablet or phone. Nothing to download.
+
 It's a Progressive Web App (PWA): once installed it works offline.
 
 ## Install on a tablet
-1. Open the GitHub Pages link while connected to the internet.
+1. Open [the app](https://richardbrb9-coder.github.io/deadly-animals/) while connected to the internet.
 2. **iPad:** in Safari tap **Share → Add to Home Screen**. **Android:** in Chrome tap **Install app**.
 3. Open it once from the home screen while still online, so every picture is saved for offline use.
 
