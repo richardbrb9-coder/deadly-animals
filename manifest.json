@@ -2,7 +2,7 @@
   "name": "Deadly Animals",
   "short_name": "Deadly Animals",
   "description": "A fun, educational app about deadly animals from all over the world, for kids.",
-  "id": "./",
+  "id": "/deadly-animals/",
   "start_url": "./index.html",
   "scope": "./",
   "display": "fullscreen",
