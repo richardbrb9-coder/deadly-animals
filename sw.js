@@ -1,4 +1,4 @@
-const CACHE_NAME = 'deadly-animals-cache-v8'; // Bump this when you change the app so tablets pick up the new version
+const CACHE_NAME = 'deadly-animals-cache-v9'; // Bump this when you change the app so tablets pick up the new version
 
 // The animal list, so every picture can be saved for offline use when the app is installed.
 importScripts('animals.js');
